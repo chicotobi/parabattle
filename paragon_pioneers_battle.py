@@ -27,73 +27,123 @@ class Typ(Enum):
   MAZOGA = 21
   DURGASH = 22
 
-def is_first_strike(i):
-  return i.typ in [Typ.CAVALRY,Typ.CUIRASSIER]
 
-def is_ranged(i):
-  return i.typ in [Typ.ARCHER, Typ.LONG_BOWARCHER, Typ.CROSSBOWMAN, Typ.CANNONEER]
-
-def is_flanking(i):
-  return i.typ in [Typ.CAVALRY,Typ.CANNONEER]
-
-def is_double_strike(i):
-  return i.typ in [Typ.LONGBOW_ARCHER]
-
-def is_trample(i):
-  return i.typ in [Typ.CANNONEER]
-
-def is_last_strike(i):
-  return i.typ in [Typ.CANNONEER]
-
-def crit(i):
-  if i.typ.value < 10:
-    return .8
-  elif i.typ.value < 19:
-    return .6
-  else:
-    return .5
 
 class militia:
-  typ = Typ.MILITIA
-  hp = 15
-  dam = 5
-  tier = 1
-  cost = 1
+  typ, hp, dam = Typ.MILITIA, 15, 5
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
+  crit, tier, cost =  0.8, 1, 1
 
 class archer:
-  typ = Typ.ARCHER
-  hp = 10
-  dam = 20
-  tier = 1
-  cost = 4
+  typ, hp, dam = Typ.ARCHER, 10, 20
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, False, False
+  crit, tier, cost = 0.8, 1, 4
 
 class footsoldier:
-  typ = Typ.FOOTSOLDIER
-  hp = 40
-  dam = 15
-  tier = 1
-  cost = 8
+  typ, hp, dam = Typ.FOOTSOLDIER, 40, 15
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
+  crit, tier, cost = 0.8, 1, 8
+
+class cavalry:
+  typ, hp, dam = Typ.CAVALRY, 5, 5
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, True, False, True, False, False
+  crit, tier, cost = 0.8, 2, 16
+
+class longbow_archer:
+  typ, hp, dam = Typ.LONGBOW_ARCHER, 10, 15
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, True, False
+  crit, tier, cost = 0.8, 2, 32
+
+class knight:
+  typ, hp, dam = Typ.KNIGHT, 90, 20
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
+  crit, tier, cost = 0.8, 3, 64
+
+class crossbowman:
+  typ, hp, dam = Typ.CROSSBOWMAN, 15, 90
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, False, False
+  crit, tier, cost = 0.8, 3, 64
+
+class cuirassier:
+  typ, hp, dam = Typ.CUIRASSIER, 120, 10
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, True, False, False
+  crit, tier, cost = 0.8, 4, 128
+
+class cannoneer:
+  typ, hp, dam = Typ.CANNONEER, 60, 80
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, True, True, False, False, True
+  crit, tier, cost = 0.8, 4, 128
+
+
 
 class orcling:
-  typ = Typ.ORCLING
-  hp = 15
-  dam = 5
-  order = 1
-  ranged = False
+  typ, hp, dam = Typ.ORCLING, 15, 5
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
+  crit =  0.6
 
-class orchunter:
-  typ = Typ.ORC_HUNTER
-  hp = 10
-  dam = 20
-  order = 1
-  ranged = True
+class orc_hunter:
+  typ, hp, dam = Typ.ORC_HUNTER, 10, 20
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, False, False
+  crit =  0.6
 
-class orcraider:
-  typ = Typ.ORC_RAIDER
-  hp = 40
-  dam = 15
-  order = 2
-  ranged = False
+class orc_raider:
+  typ, hp, dam = Typ.ORC_RAIDER, 40, 15
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
+  crit =  0.6
+
+class warg_rider:
+  typ, hp, dam = Typ.WARG_RIDER, 5, 5
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, True, False, True, False, False
+  crit =  0.6
+
+class elite_orc_hunter:
+  typ, hp, dam = Typ.ELITE_ORC_HUNTER, 10, 15
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, True, False
+  crit =  0.6
+
+class orc_veteran:
+  typ, hp, dam = Typ.ORC_VETERAN, 90, 20
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
+  crit =  0.6
+
+class elite_orc_sniper:
+  typ, hp, dam = Typ.ELITE_ORC_SNIPER, 15, 90
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, False, False
+  crit =  0.6
+
+class orc_vanguard:
+  typ, hp, dam = Typ.ORC_VANGUARD, 120, 10
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, True, False, False
+  crit =  0.6
+
+class orc_demolisher:
+  typ, hp, dam = Typ.ORC_DEMOLISHER, 60, 80
+  ranged, flanking, trample, first_strike, double_strike, last_strike = True, True, True, False, False, True
+  crit =  0.6
+
+
+
+class bula:
+  typ, hp, dam = Typ.BULA, 5_000, 150
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
+  crit =  0.5
+
+class aguk:
+  typ, hp, dam = Typ.AGUK, 11_000, 300
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
+  crit =  0.5
+
+class mazoga:
+  typ, hp, dam = Typ.MAZOGA, 120_000, 100
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
+  crit =  0.5
+
+class durgash:
+  typ, hp, dam = Typ.DURGASH, 40_000, 500
+  ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
+  crit =  0.5
+
+
 
 def deal_damage(team, dam, trample = False, flanking = False):
   if flanking:
@@ -117,12 +167,12 @@ def fight(paragons, orcs):
 
     for i in paragons:
       dam = i.dam
-      if random.random() < crit(i):
+      if random.random() < i.crit:
         dam *= 2
       orcs = deal_damage(orcs, dam)
     for i in orcs:
       dam = i.dam
-      if random.random() < crit(i):
+      if random.random() < i.crit:
         dam *= 2
       paragons = deal_damage(paragons, dam)
     paragons = [i for i in paragons if i.hp > 0]
