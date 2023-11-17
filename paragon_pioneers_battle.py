@@ -3,7 +3,7 @@ import random
 
 random.seed(0)
 
-log_level = 1
+log_level = 0
 
 class Typ(Enum):
   MILITIA = 1
@@ -167,46 +167,109 @@ def deal_damage(team, dam, trample = False, flanking = False):
         return team
     return team
 
+def phase(paragons, orcs, paragons_active, orcs_active):
+  for i in paragons_active:
+    dam = i.dam
+    if random.random() < i.crit:
+      dam *= 2
+    orcs = deal_damage(orcs, dam)
+  for i in orcs_active:
+    dam = i.dam
+    if random.random() < i.crit:
+      dam *= 2
+    paragons = deal_damage(paragons, dam)
+  paragons = [i for i in paragons if i.hp > 0]
+  orcs = [i for i in orcs if i.hp > 0]
+  return paragons, orcs
 
 def fight(paragons, orcs):
 
   i_round = 0
-
+  
   while True:
     if log_level > 0:
-      print("\nRound:", i_round)
-
-    for i in paragons:
-      dam = i.dam
-      if random.random() < i.crit:
-        dam *= 2
-      orcs = deal_damage(orcs, dam)
-    for i in orcs:
-      dam = i.dam
-      if random.random() < i.crit:
-        dam *= 2
-      paragons = deal_damage(paragons, dam)
-    paragons = [i for i in paragons if i.hp > 0]
-    orcs = [i for i in orcs if i.hp > 0]
-    if len(orcs) == 0:
-      return 1, paragons, orcs
-    elif len(paragons) == 0:
-      return 0, paragons, orcs
-    if log_level > 0:
-      print(len(orcs),len(paragons))
-
+      print("Round:", i_round)
+      
+    for phase0 in [1,2,3]:
+      if phase0 == 1:
+        paragons_active = [i for i in paragons if i.first_strike or i.double_strike]
+        orcs_active     = [i for i in orcs     if i.first_strike or i.double_strike]
+      elif phase0 == 2:
+        paragons_active = [i for i in paragons if not i.first_strike and not i.double_strike and not i.last_strike]
+        orcs_active     = [i for i in orcs     if not i.first_strike and not i.double_strike and not i.last_strike]
+      elif phase0 == 3:
+        paragons_active = [i for i in paragons if i.last_strike or i.double_strike]
+        orcs_active     = [i for i in orcs     if i.last_strike or i.double_strike]
+      if len(paragons_active) > 0 or len(orcs_active) > 0:       
+        if log_level > 1:
+          print("Phase:", phase0) 
+        paragons, orcs = phase(paragons, orcs, paragons_active, orcs_active)
+        if len(orcs) == 0:
+          return 1, paragons, orcs
+        elif len(paragons) == 0:
+          return 0, paragons, orcs
+        if log_level > 0:
+          print("Remaining orcs:",len(orcs),"Remaining paragons:",len(paragons))
+      
     # Increment round counter
     i_round += 1
 
-def create_paragons(militia0,archer0,footsoldier0):
-  return [militia() for i in range(militia0)] + [footsoldier() for i in range(footsoldier0)] + [archer() for i in range(archer0)]
+def create_paragons(militia0, archer0, footsoldier0, cavalry0, longbow_archer0, knight0, crossbowman0, cuirassier0, cannoneer0):
+  return \
+    [militia()        for i in range(militia0       )] +\
+    [archer()         for i in range(archer0        )] +\
+    [footsoldier()    for i in range(footsoldier0   )] +\
+    [cavalry()        for i in range(cavalry0       )] +\
+    [longbow_archer() for i in range(longbow_archer0)] +\
+    [knight()         for i in range(knight0        )] +\
+    [crossbowman()    for i in range(crossbowman0   )] +\
+    [cuirassier()     for i in range(cuirassier0    )] +\
+    [cannoneer()      for i in range(cannoneer0     )]
 
-def create_orcs(orcling0,orc_hunter0,orc_raider0):
-  return [orcling() for i in range(orcling0)] + [orc_raider() for i in range(orc_raider0)] + [orc_hunter() for i in range(orc_hunter0)]
+def create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_orc_hunter0, orc_veteran0, elite_orc_sniper0, orc_vanguard0, orc_demolisher0, bula0, aguk0, mazoga0, durgash0):
+  return \
+    [orcling()          for i in range(orcling0          )] +\
+    [orc_hunter()       for i in range(orc_hunter0       )] +\
+    [orc_raider()       for i in range(orc_raider0       )] +\
+    [warg_rider()       for i in range(warg_rider0       )] +\
+    [elite_orc_hunter() for i in range(elite_orc_hunter0 )] +\
+    [orc_veteran()      for i in range(orc_veteran0      )] +\
+    [elite_orc_sniper() for i in range(elite_orc_sniper0 )] +\
+    [orc_vanguard()     for i in range(orc_vanguard0     )] +\
+    [orc_demolisher()   for i in range(orc_demolisher0   )] +\
+    [bula()             for i in range(bula0             )] +\
+    [aguk()             for i in range(aguk0             )] +\
+    [mazoga()           for i in range(mazoga0           )] +\
+    [durgash()          for i in range(durgash0          )]
 
 
-paragons = create_paragons(26,10,0)
-orcs = create_orcs(42,0,0)
+militia0        = 40
+archer0         = 0
+footsoldier0    = 0
+cavalry0        = 0
+longbow_archer0 = 0
+knight0         = 0
+crossbowman0    = 0
+cuirassier0     = 0
+cannoneer0      = 0
+
+orcling0          = 41
+orc_hunter0       = 0
+orc_raider0       = 0
+warg_rider0       = 0
+elite_orc_hunter0 = 0
+orc_veteran0      = 0
+elite_orc_sniper0 = 0
+orc_vanguard0     = 0
+orc_demolisher0   = 0
+
+bula0 = 0
+aguk0 = 0
+mazoga0 = 0
+durgash0 = 0
+
+paragons = create_paragons(militia0, archer0, footsoldier0, cavalry0, longbow_archer0, knight0, crossbowman0, cuirassier0, cannoneer0)
+orcs     = create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_orc_hunter0, orc_veteran0, elite_orc_sniper0, orc_vanguard0, orc_demolisher0, bula0, aguk0, mazoga0, durgash0)
 print("This team costs",cost(paragons),"gold.")
 print("This fights takes",duration(paragons+orcs),"seconds.")
 
@@ -217,8 +280,11 @@ for j in range(10):
   n_orcs = 0
 
   for i_fight in range(nfights):
-    paragons = create_paragons(40,0,0)
-    orcs = create_orcs(42,0,0)
+    if log_level > 0:
+      print("Fight:", i_fight)
+    
+    paragons = create_paragons(militia0, archer0, footsoldier0, cavalry0, longbow_archer0, knight0, crossbowman0, cuirassier0, cannoneer0)
+    orcs     = create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_orc_hunter0, orc_veteran0, elite_orc_sniper0, orc_vanguard0, orc_demolisher0, bula0, aguk0, mazoga0, durgash0)
     win, paragons, orcs = fight(paragons, orcs)
     wins += win
     n_paragons += len(paragons)
