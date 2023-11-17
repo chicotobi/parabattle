@@ -3,6 +3,8 @@ import random
 
 random.seed(0)
 
+log_level = 1
+
 class Typ(Enum):
   MILITIA = 1
   ARCHER = 2
@@ -171,7 +173,8 @@ def fight(paragons, orcs):
   i_round = 0
 
   while True:
-    #print("\nRound:", i_round)
+    if log_level > 0:
+      print("\nRound:", i_round)
 
     for i in paragons:
       dam = i.dam
@@ -189,6 +192,8 @@ def fight(paragons, orcs):
       return 1, paragons, orcs
     elif len(paragons) == 0:
       return 0, paragons, orcs
+    if log_level > 0:
+      print(len(orcs),len(paragons))
 
     # Increment round counter
     i_round += 1
@@ -212,7 +217,7 @@ for j in range(10):
   n_orcs = 0
 
   for i_fight in range(nfights):
-    paragons = create_paragons(26,10,0)
+    paragons = create_paragons(40,0,0)
     orcs = create_orcs(42,0,0)
     win, paragons, orcs = fight(paragons, orcs)
     wins += win
