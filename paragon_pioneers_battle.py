@@ -79,71 +79,79 @@ class cannoneer:
 class orcling:
   typ, hp, dam = Typ.ORCLING, 15, 5
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
-  crit =  0.6
+  crit, tier =  0.6, 1
 
 class orc_hunter:
   typ, hp, dam = Typ.ORC_HUNTER, 10, 20
   ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, False, False
-  crit =  0.6
+  crit, tier =  0.6, 1
 
 class orc_raider:
   typ, hp, dam = Typ.ORC_RAIDER, 40, 15
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
-  crit =  0.6
+  crit, tier =  0.6, 1
 
 class warg_rider:
   typ, hp, dam = Typ.WARG_RIDER, 5, 5
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, True, False, True, False, False
-  crit =  0.6
+  crit, tier =  0.6, 2
 
 class elite_orc_hunter:
   typ, hp, dam = Typ.ELITE_ORC_HUNTER, 10, 15
   ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, True, False
-  crit =  0.6
+  crit, tier =  0.6, 2
 
 class orc_veteran:
   typ, hp, dam = Typ.ORC_VETERAN, 90, 20
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, False, False, False
-  crit =  0.6
+  crit, tier =  0.6, 3
 
 class elite_orc_sniper:
   typ, hp, dam = Typ.ELITE_ORC_SNIPER, 15, 90
   ranged, flanking, trample, first_strike, double_strike, last_strike = True, False, False, False, False, False
-  crit =  0.6
+  crit, tier =  0.6, 3
 
 class orc_vanguard:
   typ, hp, dam = Typ.ORC_VANGUARD, 120, 10
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, False, True, False, False
-  crit =  0.6
+  crit, tier =  0.6, 4
 
 class orc_demolisher:
   typ, hp, dam = Typ.ORC_DEMOLISHER, 60, 80
   ranged, flanking, trample, first_strike, double_strike, last_strike = True, True, True, False, False, True
-  crit =  0.6
+  crit, tier =  0.6, 4
 
 
 
 class bula:
   typ, hp, dam = Typ.BULA, 5_000, 150
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
-  crit =  0.5
+  crit, tier =  0.5, 100
 
 class aguk:
   typ, hp, dam = Typ.AGUK, 11_000, 300
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
-  crit =  0.5
+  crit, tier =  0.5, 150
 
 class mazoga:
   typ, hp, dam = Typ.MAZOGA, 120_000, 100
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
-  crit =  0.5
+  crit, tier =  0.5, 200
 
 class durgash:
   typ, hp, dam = Typ.DURGASH, 40_000, 500
   ranged, flanking, trample, first_strike, double_strike, last_strike = False, False, True, False, False, True
-  crit =  0.5
+  crit, tier =  0.5, 300
 
 
+
+def cost(team):
+  return sum(i.cost for i in team)
+
+def duration(team):
+  tier_sum = sum(i.tier for i in team)
+  duration = (2*tier_sum)**1.4
+  return min(8*60*60,duration)
 
 def deal_damage(team, dam, trample = False, flanking = False):
   if flanking:
@@ -188,16 +196,22 @@ def fight(paragons, orcs):
 def create_paragons(militia0,archer0,footsoldier0):
   return [militia() for i in range(militia0)] + [footsoldier() for i in range(footsoldier0)] + [archer() for i in range(archer0)]
 
-def create_orcs(orcling0,orchunter0,orcraider0):
-  return [orcling() for i in range(orcling0)] + [orcraider() for i in range(orcraider0)] + [orchunter() for i in range(orchunter0)]
+def create_orcs(orcling0,orc_hunter0,orc_raider0):
+  return [orcling() for i in range(orcling0)] + [orc_raider() for i in range(orc_raider0)] + [orc_hunter() for i in range(orc_hunter0)]
+
+
+paragons = create_paragons(26,10,0)
+orcs = create_orcs(42,0,0)
+print("This team costs",cost(paragons),"gold.")
+print("This fights takes",duration(paragons+orcs),"seconds.")
 
 for j in range(10):
   nfights = 1000
   wins = 0
   n_paragons = 0
   n_orcs = 0
+
   for i_fight in range(nfights):
-    #print("\nFight:",i_fight)
     paragons = create_paragons(26,10,0)
     orcs = create_orcs(42,0,0)
     win, paragons, orcs = fight(paragons, orcs)
