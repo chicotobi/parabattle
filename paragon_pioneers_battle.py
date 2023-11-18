@@ -170,12 +170,12 @@ def phase(paragons, orcs, paragons_active, orcs_active):
     dam = i.dam
     if random.random() < i.crit:
       dam *= 2
-    orcs = deal_damage(orcs, dam)
+    deal_damage(orcs, dam)
   for i in orcs_active:
     dam = i.dam
     if random.random() < i.crit:
       dam *= 2
-    paragons = deal_damage(paragons, dam)
+    deal_damage(paragons, dam)
   paragons = [i for i in paragons if i.hp > 0]
   orcs = [i for i in orcs if i.hp > 0]
   return paragons, orcs
@@ -266,7 +266,7 @@ aguk0 = 0
 mazoga0 = 0
 durgash0 = 0
 
-example = 1
+example = 0
 if example == 0:
   cavalry0 = 21
   orcling0          = 20
