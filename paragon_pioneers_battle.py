@@ -3,8 +3,6 @@ import random
 
 random.seed(0)
 
-log_level = 0
-
 class Typ(Enum):
   MILITIA = 1
   ARCHER = 2
@@ -243,17 +241,17 @@ def create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_orc_hunte
     [durgash()          for i in range(durgash0          )]
 
 
-militia0        = 40
+militia0        = 0
 archer0         = 0
 footsoldier0    = 0
-cavalry0        = 0
+cavalry0        = 21
 longbow_archer0 = 0
 knight0         = 0
 crossbowman0    = 0
 cuirassier0     = 0
 cannoneer0      = 0
 
-orcling0          = 41
+orcling0          = 20
 orc_hunter0       = 0
 orc_raider0       = 0
 warg_rider0       = 0
@@ -273,13 +271,19 @@ orcs     = create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_or
 print("This team costs",cost(paragons),"gold.")
 print("This fights takes",duration(paragons+orcs),"seconds.")
 
-for j in range(10):
-  nfights = 1000
+log_level = 2
+
+reps = 10
+fights = 1000
+reps = 1
+fights = 1
+
+for j in range(reps):
   wins = 0
   n_paragons = 0
   n_orcs = 0
 
-  for i_fight in range(nfights):
+  for i_fight in range(fights):
     if log_level > 0:
       print("Fight:", i_fight)
     
@@ -289,4 +293,4 @@ for j in range(10):
     wins += win
     n_paragons += len(paragons)
     n_orcs += len(orcs)
-  print(wins / nfights,n_paragons / nfights, n_orcs / nfights)
+  print(wins / fights, n_paragons / fights, n_orcs / fights)
