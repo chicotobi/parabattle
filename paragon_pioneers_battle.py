@@ -244,14 +244,14 @@ def create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_orc_hunte
 militia0        = 0
 archer0         = 0
 footsoldier0    = 0
-cavalry0        = 21
+cavalry0        = 0
 longbow_archer0 = 0
 knight0         = 0
 crossbowman0    = 0
 cuirassier0     = 0
 cannoneer0      = 0
 
-orcling0          = 20
+orcling0          = 0
 orc_hunter0       = 0
 orc_raider0       = 0
 warg_rider0       = 0
@@ -266,17 +266,27 @@ aguk0 = 0
 mazoga0 = 0
 durgash0 = 0
 
+example = 1
+if example == 0:
+  cavalry0 = 21
+  orcling0          = 20
+  reps = 10
+  fights = 1000
+  log_level = 0
+elif example == 1:
+  cavalry0 = 21
+  orcling0 = 20
+  reps = 1
+  fights = 1
+  log_level = 2
+
+
 paragons = create_paragons(militia0, archer0, footsoldier0, cavalry0, longbow_archer0, knight0, crossbowman0, cuirassier0, cannoneer0)
 orcs     = create_orcs(orcling0, orc_hunter0, orc_raider0, warg_rider0, elite_orc_hunter0, orc_veteran0, elite_orc_sniper0, orc_vanguard0, orc_demolisher0, bula0, aguk0, mazoga0, durgash0)
 print("This team costs",cost(paragons),"gold.")
 print("This fights takes",duration(paragons+orcs),"seconds.")
 
-log_level = 2
 
-reps = 10
-fights = 1000
-reps = 1
-fights = 1
 
 for j in range(reps):
   wins = 0
