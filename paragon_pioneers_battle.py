@@ -159,11 +159,9 @@ def deal_damage(team, dam, trample = False, flanking = False):
   elif trample:
     raise ValueError
   else:
-    for i in team:
-      if i.hp > 0:
-        i.hp -= dam
-        return team
-    return team
+    tmp = [i for i in team if i.hp > 0]
+    if len(tmp) > 0:
+      tmp[0].hp -= dam
 
 def phase(paragons, orcs, paragons_active, orcs_active):
   for i in paragons_active:
