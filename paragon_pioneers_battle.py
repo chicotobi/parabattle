@@ -150,7 +150,7 @@ def cost(team):
 
 def duration(team):
   tier_sum = sum(i.tier for i in team)
-  duration = (2*tier_sum)**1.4
+  duration = round((2*tier_sum)**1.4)
   return min(8*60*60,duration)
 
 def deal_damage(team, dam, trample = False, flanking = False):
@@ -267,7 +267,7 @@ durgash0 = 0
 example = 0
 if example == 0:
   cavalry0 = 21
-  orcling0          = 20
+  orcling0 = 20
   reps = 10
   fights = 1000
   log_level = 0
